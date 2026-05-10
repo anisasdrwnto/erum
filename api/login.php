@@ -62,16 +62,21 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
         return;
     }
 
-    const formData = new FormData();
-
-    formData.append('email', email);
-    formData.append('password', password);
-
     try {
 
         const response = await fetch('/proses_login.php', {
+
             method: 'POST',
-            body: formData
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+
         });
 
         const result = await response.json();
@@ -90,7 +95,7 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
 
                 window.location.href = result.redirect;
 
-            }, 700);
+            }, 500);
 
         } else {
 
