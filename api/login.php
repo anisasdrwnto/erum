@@ -1,6 +1,6 @@
 <?php
 require_once 'db.php';
-sessionStart();
+
 if (isLoggedIn()) {
     header('Location: ' . (isSuperAdmin() ? 'dashboard_admin.php' : 'dashboard.php'));
     exit;
