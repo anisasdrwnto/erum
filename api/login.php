@@ -56,7 +56,7 @@ $('#loginBtn').click(function(){
     }
 
     $.ajax({
-        url: 'api/proses_login.php',
+        url: '/proses_login.php',
         method: 'POST',
         dataType: 'json',
         data: { email, password },
