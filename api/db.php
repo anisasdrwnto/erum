@@ -1,76 +1,81 @@
 <?php
-// config/db.php - Konfigurasi koneksi database TiDB/MySQL
-define('DB_HOST', 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com');
-define('DB_PORT', '4000');
-define('DB_NAME', 'erum_db');
-define('DB_USER', 'm6CeAMKqTKdvTTf.root');
-define('DB_PASS', 'oV4bfsGvFPMws4om');
-define('DB_CHARSET', 'utf8mb4');
 
-function getDB(): PDO {
-    static $pdo = null;
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_path', '/');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_samesite', 'Lax');
 
-    if ($pdo === null) {
-
-        $dsn = "mysql:host=" . DB_HOST .
-               ";port=" . DB_PORT .
-               ";dbname=" . DB_NAME .
-               ";charset=" . DB_CHARSET;
-
-        try {
-
-            $options = [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-
-                // SSL untuk TiDB Cloud
-                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
-            ];
-
-            $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-
-        } catch (PDOException $e) {
-
-            die(json_encode([
-                'status' => 'error',
-                'message' => 'Koneksi database gagal: ' . $e->getMessage()
-            ]));
-        }
-    }
-
-    return $pdo;
+    session_start();
 }
 
-// Session helper
-function sessionStart(): void {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+// DATABASE CONFIG
+$host   = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
+$user   = 'm6CeAMKqTKdvTTf.root';
+$pass   = 'oV4bfsGvFPMws4om';
+$dbname = 'erum_db';
+$port   = 4000;
+
+try {
+
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+
+    $connection = new PDO($dsn, $user, $pass, [
+
+        // SSL wajib untuk TiDB Cloud
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+
+        // path CA bawaan Linux/Vercel
+        PDO::MYSQL_ATTR_SSL_CA => '/etc/ssl/certs/ca-certificates.crt',
+
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_TIMEOUT => 8,
+    ]);
+
+} catch (PDOException $e) {
+
+    http_response_code(500);
+
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Koneksi database gagal: ' . $e->getMessage()
+    ]));
 }
+
+
+// =========================
+// SESSION HELPER
+// =========================
 
 function isLoggedIn(): bool {
-    sessionStart();
+
     return isset($_SESSION['user_id']);
 }
 
 function isSuperAdmin(): bool {
-    sessionStart();
-    return isset($_SESSION['role']) && $_SESSION['role'] === 'superadmin';
+
+    return isset($_SESSION['role']) &&
+           $_SESSION['role'] === 'superadmin';
 }
 
 function requireLogin(): void {
+
     if (!isLoggedIn()) {
+
         header('Location: login.php');
         exit;
     }
 }
 
 function requireSuperAdmin(): void {
+
     requireLogin();
 
     if (!isSuperAdmin()) {
+
         header('Location: dashboard.php?error=unauthorized');
         exit;
     }
 }
+?>
