@@ -1,11 +1,17 @@
 <?php
 // proses_login.php
+
 require_once 'db.php';
+
 header('Content-Type: application/json');
-sessionStart();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['status' => 'error', 'message' => 'Metode tidak valid.']);
+
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Metode tidak valid.'
+    ]);
+
     exit;
 }
 
@@ -13,50 +19,105 @@ $email    = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 
 if (!$email || !$password) {
-    echo json_encode(['status' => 'error', 'message' => 'Email dan password wajib diisi.']);
+
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Email dan password wajib diisi.'
+    ]);
+
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['status' => 'error', 'message' => 'Format email tidak valid.']);
+
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Format email tidak valid.'
+    ]);
+
     exit;
 }
 
 try {
-    $db   = getDB();
-    $stmt = $db->prepare("SELECT id, nama, email, password, role, status FROM users WHERE email = ? LIMIT 1");
+
+    global $connection;
+
+    $stmt = $connection->prepare("
+        SELECT 
+            id,
+            nama,
+            email,
+            password,
+            role,
+            status
+        FROM users
+        WHERE email = ?
+        LIMIT 1
+    ");
+
     $stmt->execute([$email]);
-    $user = $stmt->fetch();
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-        echo json_encode(['status' => 'error', 'message' => 'Email tidak terdaftar.']);
+
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Email tidak terdaftar.'
+        ]);
+
         exit;
     }
 
     if ($user['status'] !== 'aktif') {
-        echo json_encode(['status' => 'error', 'message' => 'Akun kamu tidak aktif. Hubungi administrator.']);
+
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Akun kamu tidak aktif.'
+        ]);
+
         exit;
     }
 
-    // Verify password (support plain text for dev & bcrypt for prod)
+    // cek password
     $valid = password_verify($password, $user['password']);
-    // Fallback plain for demo seeding
-    if (!$valid && $password === $user['password']) $valid = true;
+
+    // fallback plain text
+    if (!$valid && $password === $user['password']) {
+        $valid = true;
+    }
 
     if (!$valid) {
-        echo json_encode(['status' => 'error', 'message' => 'Password salah.']);
+
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password salah.'
+        ]);
+
         exit;
     }
 
-    // Set session
+    // session
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['nama']    = $user['nama'];
     $_SESSION['email']   = $user['email'];
     $_SESSION['role']    = $user['role'];
 
-    $redirect = $user['role'] === 'superadmin' ? 'dashboard_admin.php' : 'dashboard.php';
-    echo json_encode(['status' => 'ok', 'redirect' => $redirect, 'role' => $user['role']]);
+    $redirect = $user['role'] === 'superadmin'
+        ? 'dashboard_admin.php'
+        : 'dashboard.php';
+
+    echo json_encode([
+        'status' => 'ok',
+        'redirect' => $redirect,
+        'role' => $user['role']
+    ]);
 
 } catch (Exception $e) {
-    echo json_encode(['status' => 'error', 'message' => 'Kesalahan server: ' . $e->getMessage()]);
+
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Kesalahan server: ' . $e->getMessage()
+    ]);
 }
+?>
