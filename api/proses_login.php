@@ -4,8 +4,7 @@ session_start();
 require_once __DIR__ . '/db.php';
 
 header('Content-Type: application/json');
-echo json_encode($_SERVER);
-exit;
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
@@ -35,9 +34,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 try {
-
-    // ❌ INI YANG SALAH: getDB()
-    // ✔️ GANTI KE $connection dari db.php
 
     global $connection;
 
@@ -89,7 +85,7 @@ try {
     $_SESSION['role']    = $user['role'];
 
     $redirect = ($user['role'] === 'superadmin')
-        ? '/api/dashboard_admin.php'
+        ? '/dashboard_admin.php'
         : '/dashboard.php';
 
     echo json_encode([
