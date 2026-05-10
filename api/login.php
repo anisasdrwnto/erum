@@ -68,19 +68,19 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
 
        const response = await fetch('/api/proses_login.php', {
 
-            method: 'POST',
+          method: 'POST',
 
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
+          headers: {
+              'Content-Type': 'application/json'
+          },
 
-            body: new URLSearchParams({
-                email: email,
-                password: password
-            })
+          body: JSON.stringify({
+              email: email,
+              password: password
+          })
 
-        });
-        
+      });
+
         const result = await response.json();
 
         console.log(result);

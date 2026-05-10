@@ -6,8 +6,10 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/db.php';
 
-$email    = trim($_POST['email'] ?? '');
-$password = trim($_POST['password'] ?? '');
+$data = json_decode(file_get_contents("php://input"), true);
+
+$email = trim($data['email'] ?? '');
+$password = trim($data['password'] ?? '');
 
 if (!$email || !$password) {
 
@@ -46,7 +48,6 @@ try {
 
     $valid = password_verify($password, $user['password']);
 
-    // fallback plaintext
     if (!$valid && $password === $user['password']) {
         $valid = true;
     }
@@ -66,13 +67,11 @@ try {
     $_SESSION['email']   = $user['email'];
     $_SESSION['role']    = $user['role'];
 
-    $redirect = ($user['role'] === 'superadmin')
-    ? '/api/dashboard_admin.php'
-    : '/api/dashboard.php';
-
     echo json_encode([
         'status' => 'ok',
-        'redirect' => $redirect
+        'redirect' => ($user['role'] === 'superadmin')
+            ? '/api/dashboard_admin.php'
+            : '/api/dashboard.php'
     ]);
 
 } catch (Exception $e) {
