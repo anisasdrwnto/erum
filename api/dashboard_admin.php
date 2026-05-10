@@ -1,9 +1,15 @@
 <?php
+
 require_once 'db.php';
+
+// wajib login + superadmin
 requireSuperAdmin();
 
+// pakai koneksi dari db.php
+global $connection;
+$db = $connection;
+
 // Fetch summary stats
-$db = getDB();
 $totalUsers    = $db->query("SELECT COUNT(*) FROM users")->fetchColumn();
 $aktifUsers    = $db->query("SELECT COUNT(*) FROM users WHERE status='aktif'")->fetchColumn();
 $companies     = $db->query("SELECT COUNT(*) FROM perusahaan")->fetchColumn();
@@ -11,19 +17,34 @@ $totalKaryawan = $db->query("SELECT COUNT(*) FROM karyawan")->fetchColumn();
 
 // Users per role
 $roleRows = $db->query("SELECT role, COUNT(*) AS total FROM users GROUP BY role")->fetchAll();
-$roleData  = [];
-foreach($roleRows as $r) $roleData[$r['role']] = $r['total'];
+
+$roleData = [];
+foreach ($roleRows as $r) {
+    $roleData[$r['role']] = $r['total'];
+}
 
 // Status users
 $aktifCount    = $db->query("SELECT COUNT(*) FROM users WHERE status='aktif'")->fetchColumn();
 $nonaktifCount = $db->query("SELECT COUNT(*) FROM users WHERE status='nonaktif'")->fetchColumn();
 
-$adminNama = $_SESSION['nama'];
-$today = date('l, d F Y');
-$todayId = ['Sunday'=>'Minggu','Monday'=>'Senin','Tuesday'=>'Selasa','Wednesday'=>'Rabu','Thursday'=>'Kamis','Friday'=>'Jumat','Saturday'=>'Sabtu'];
-$today = $todayId[date('l')] . ', ' . date('d') . ' ' . ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][(int)date('m')] . ' ' . date('Y');
+// session user
+$adminNama = $_SESSION['nama'] ?? 'Admin';
+
+// tanggal
+$hari = [
+    'Sunday'=>'Minggu','Monday'=>'Senin','Tuesday'=>'Selasa',
+    'Wednesday'=>'Rabu','Thursday'=>'Kamis','Friday'=>'Jumat','Saturday'=>'Sabtu'
+];
+
+$bulan = [
+    1=>'Januari','Februari','Maret','April','Mei','Juni',
+    'Juli','Agustus','September','Oktober','November','Desember'
+];
+
+$today = $hari[date('l')] . ', ' . date('d') . ' ' . $bulan[(int)date('m')] . ' ' . date('Y');
 
 $currentPage = basename($_SERVER['PHP_SELF'], '.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
