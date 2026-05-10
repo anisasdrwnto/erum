@@ -64,6 +64,8 @@ try {
     $stmt->execute([$email]);
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    echo json_encode($user);
+    exit;
 
     if (!$user) {
 
