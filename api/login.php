@@ -64,16 +64,20 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
 
     try {
 
-      const response = await fetch('/api/proses_login.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              email,
-              password
-          })
-      });
+        const response = await fetch('/proses_login.php', {
+
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+
+            body: new URLSearchParams({
+                email: email,
+                password: password
+            })
+
+        });
 
         const result = await response.json();
 
@@ -91,7 +95,7 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
 
                 window.location.href = result.redirect;
 
-            }, 500);
+            }, 700);
 
         } else {
 
@@ -118,6 +122,5 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
 });
 
 </script>
-
 </body>
 </html>
