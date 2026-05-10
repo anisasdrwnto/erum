@@ -66,7 +66,7 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
 
     try {
 
-        const response = await fetch('/proses_login.php', {
+       const response = await fetch('/api/proses_login.php', {
 
             method: 'POST',
 
@@ -80,7 +80,7 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
             })
 
         });
-
+        
         const result = await response.json();
 
         console.log(result);
