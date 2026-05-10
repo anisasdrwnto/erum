@@ -60,21 +60,17 @@ function isSuperAdmin(): bool {
 }
 
 function requireLogin(): void {
-
     if (!isLoggedIn()) {
-
-        header('Location: login.php');
+        header('Location: /login.php');
         exit;
     }
 }
 
 function requireSuperAdmin(): void {
-
     requireLogin();
 
     if (!isSuperAdmin()) {
-
-        header('Location: dashboard.php?error=unauthorized');
+        header('Location: /dashboard.php?error=unauthorized');
         exit;
     }
 }
