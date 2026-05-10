@@ -6,8 +6,8 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/db.php';
 
-echo json_encode($_POST);
-exit;
+// echo json_encode($_POST);
+// exit;
 
 $email    = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';

@@ -46,84 +46,77 @@ $error = $_GET['error'] ?? '';
 
 <script>
 
-$('#loginBtn').click(function () {
+document.getElementById('loginBtn').addEventListener('click', async function () {
 
-    const email = $('#email').val().trim();
-    const password = $('#password').val().trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
 
     if (!email || !password) {
 
-        $('#alert').html(`
+        document.getElementById('alert').innerHTML = `
             <div class="alert alert-danger">
                 Isi email dan password
             </div>
-        `);
+        `;
 
         return;
     }
 
-    $.ajax({
+    const formData = new FormData();
 
-        url: '/proses_login.php',
+    formData.append('email', email);
+    formData.append('password', password);
 
-        type: 'POST',
+    try {
 
-        data: {
-            email: email,
-            password: password
-        },
+        const response = await fetch('/proses_login.php', {
+            method: 'POST',
+            body: formData
+        });
 
-        success: function (response) {
+        const result = await response.json();
 
-            console.log(response);
+        console.log(result);
 
-            // kalau response masih string
-            if (typeof response === 'string') {
-                response = JSON.parse(response);
-            }
+        if (result.status === 'ok') {
 
-            if (response.status === 'ok') {
-
-                $('#alert').html(`
-                    <div class="alert alert-success">
-                        Login berhasil...
-                    </div>
-                `);
-
-                setTimeout(() => {
-
-                    window.location.href = response.redirect;
-
-                }, 700);
-
-            } else {
-
-                $('#alert').html(`
-                    <div class="alert alert-danger">
-                        ${response.message}
-                    </div>
-                `);
-
-            }
-
-        },
-
-        error: function (xhr) {
-
-            console.log(xhr.responseText);
-
-            $('#alert').html(`
-                <div class="alert alert-danger">
-                    Server error
+            document.getElementById('alert').innerHTML = `
+                <div class="alert alert-success">
+                    Login berhasil...
                 </div>
-            `);
+            `;
+
+            setTimeout(() => {
+
+                window.location.href = result.redirect;
+
+            }, 700);
+
+        } else {
+
+            document.getElementById('alert').innerHTML = `
+                <div class="alert alert-danger">
+                    ${result.message}
+                </div>
+            `;
 
         }
 
-    });
+    } catch (err) {
+
+        console.error(err);
+
+        document.getElementById('alert').innerHTML = `
+            <div class="alert alert-danger">
+                Server error
+            </div>
+        `;
+
+    }
 
 });
 
 </script>
+
 </body>
 </html>
