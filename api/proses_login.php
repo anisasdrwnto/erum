@@ -31,13 +31,13 @@ $password =
 
 
 // DEBUG
-// echo json_encode([
-//     'json' => $json,
-//     '_POST' => $_POST,
-//     'email' => $email,
-//     'password' => $password
-// ]);
-// exit;
+echo json_encode([
+    'json' => $json,
+    '_POST' => $_POST,
+    'email' => $email,
+    'password' => $password
+]);
+exit;
 
 
 if (empty($email) || empty($password)) {
