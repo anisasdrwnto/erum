@@ -1,5 +1,7 @@
 <?php
-require_once '../db.php'; // karena file ada di /api
+session_start();
+
+require_once __DIR__ . '/db.php';
 
 header('Content-Type: application/json');
 
