@@ -4,7 +4,9 @@ require_once 'db.php';
 
 // kalau sudah login langsung arahkan
 if (isLoggedIn()) {
-    header('Location: ' . (isSuperAdmin() ? '/dashboard_admin.php' : '/dashboard.php'));
+    header('Location: ' . (isSuperAdmin()
+    ? '/api/dashboard_admin.php'
+    : '/api/dashboard.php'));
     exit;
 }
 

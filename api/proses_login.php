@@ -67,8 +67,8 @@ try {
     $_SESSION['role']    = $user['role'];
 
     $redirect = ($user['role'] === 'superadmin')
-        ? '/dashboard_admin.php'
-        : '/dashboard.php';
+    ? '/api/dashboard_admin.php'
+    : '/api/dashboard.php';
 
     echo json_encode([
         'status' => 'ok',
