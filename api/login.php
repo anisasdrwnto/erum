@@ -45,41 +45,85 @@ $error = $_GET['error'] ?? '';
 </div>
 
 <script>
-$('#loginBtn').click(function(){
 
-    let email = $('#email').val();
-    let password = $('#password').val();
+$('#loginBtn').click(function () {
 
-    if(!email || !password){
-        $('#alert').html('<div class="alert alert-danger">Isi semua field</div>');
+    const email = $('#email').val().trim();
+    const password = $('#password').val().trim();
+
+    if (!email || !password) {
+
+        $('#alert').html(`
+            <div class="alert alert-danger">
+                Isi email dan password
+            </div>
+        `);
+
         return;
     }
 
     $.ajax({
+
         url: '/proses_login.php',
-        method: 'POST',
-        dataType: 'json',
-        data: { email, password },
-        success: function(res){
 
-            if(res.status === 'ok'){
+        type: 'POST',
 
-                $('#alert').html('<div class="alert alert-success">Login sukses</div>');
+        data: {
+            email: email,
+            password: password
+        },
+
+        success: function (response) {
+
+            console.log(response);
+
+            // kalau response masih string
+            if (typeof response === 'string') {
+                response = JSON.parse(response);
+            }
+
+            if (response.status === 'ok') {
+
+                $('#alert').html(`
+                    <div class="alert alert-success">
+                        Login berhasil...
+                    </div>
+                `);
 
                 setTimeout(() => {
-                    window.location.href = res.redirect;
-                }, 500);
+
+                    window.location.href = response.redirect;
+
+                }, 700);
 
             } else {
-                $('#alert').html('<div class="alert alert-danger">'+res.message+'</div>');
-            }
-        },
-        error: function(){
-            $('#alert').html('<div class="alert alert-danger">Server error</div>');
-        }
-    });
-});
-</script>
 
+                $('#alert').html(`
+                    <div class="alert alert-danger">
+                        ${response.message}
+                    </div>
+                `);
+
+            }
+
+        },
+
+        error: function (xhr) {
+
+            console.log(xhr.responseText);
+
+            $('#alert').html(`
+                <div class="alert alert-danger">
+                    Server error
+                </div>
+            `);
+
+        }
+
+    });
+
+});
+
+</script>
 </body>
 </html>
