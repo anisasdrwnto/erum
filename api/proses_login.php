@@ -4,6 +4,8 @@ session_start();
 require_once __DIR__ . '/db.php';
 
 header('Content-Type: application/json');
+echo json_encode($_SERVER);
+exit;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
