@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ERUM – Solusi Manajemen UMKM</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary:#6366f1; --primary-dark:#4f46e5; --accent:#10b981;
+      --dark:#0f0f1a; --card:#1a1a2e; --border:rgba(99,102,241,.2);
+      --text:#e2e8f0; --text-muted:#94a3b8; --radius:16px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;}
+    /* NAVBAR */
+    #mainNav{background:rgba(15,15,26,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.6rem 0;transition:all .3s;}
+    .navbar-brand{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-1px;}
+    .navbar-brand .e{color:var(--primary);}.navbar-brand .rum{color:#fff;}
+    .nav-link{color:var(--text-muted)!important;font-weight:500;font-size:.88rem;transition:.2s;}
+    .nav-link:hover{color:#fff!important;}
+    .btn-demo{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff!important;padding:.45rem 1.1rem;border-radius:10px;font-weight:600;font-size:.85rem;transition:.2s;}
+    .btn-demo:hover{opacity:.9;}
+    /* HERO */
+    .hero-section{min-height:100vh;display:flex;align-items:center;padding:5rem 0 3rem;position:relative;overflow:hidden;}
+    .hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;}
+    .blob1{width:600px;height:600px;background:var(--primary);top:-200px;left:-200px;animation:blobPulse 8s ease-in-out infinite alternate;}
+    .blob2{width:400px;height:400px;background:#10b981;bottom:-100px;right:-100px;animation:blobPulse 10s ease-in-out infinite alternate-reverse;}
+    @keyframes blobPulse{from{transform:scale(1);}to{transform:scale(1.1) translate(20px,20px);}}
+    .badge-pill{display:inline-block;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:var(--primary);padding:.35rem .9rem;border-radius:50px;font-size:.8rem;font-weight:600;}
+    .hero-title{font-family:'Sora',sans-serif;font-size:clamp(2.2rem,5vw,3.2rem);font-weight:800;line-height:1.15;margin:.5rem 0 1rem;letter-spacing:-1px;}
+    .gradient-text{background:linear-gradient(135deg,var(--primary),#a855f7,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-desc{color:var(--text-muted);font-size:1rem;line-height:1.7;max-width:500px;}
+    .btn-primary-cta{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;padding:.8rem 1.6rem;border-radius:12px;font-family:inherit;font-weight:700;font-size:.92rem;text-decoration:none;transition:.2s;}
+    .btn-primary-cta:hover{opacity:.9;color:#fff;transform:translateY(-1px);}
+    .btn-outline-cta{background:transparent;color:var(--text);border:1px solid var(--border);padding:.8rem 1.6rem;border-radius:12px;font-family:inherit;font-weight:600;font-size:.92rem;text-decoration:none;transition:.2s;}
+    .btn-outline-cta:hover{border-color:var(--primary);color:var(--primary);}
+    .hero-stats{gap:2rem;}
+    .stat-item{text-align:center;}
+    .stat-num{font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;color:var(--primary);}
+    .stat-item p{font-size:.75rem;color:var(--text-muted);margin-top:.2rem;}
+    .stat-divider{width:1px;background:var(--border);height:40px;align-self:center;}
+    /* DASHBOARD MOCKUP */
+    .dashboard-mockup{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:floatAnim 4s ease-in-out infinite alternate;}
+    @keyframes floatAnim{from{transform:translateY(0);}to{transform:translateY(-12px);}}
+    .mockup-header{background:#252540;padding:.7rem 1rem;display:flex;align-items:center;gap:.4rem;}
+    .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:2px;}
+    .dot.red{background:#ff5f56;}.dot.yellow{background:#ffbd2e;}.dot.green{background:#27c93f;}
+    .mockup-title{color:var(--text-muted);font-size:.75rem;margin-left:.5rem;}
+    .mockup-body{padding:1rem;}
+    .mockup-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.8rem;}
+    .mockup-card{background:rgba(99,102,241,.1);border:1px solid var(--border);border-radius:10px;padding:.7rem;display:flex;align-items:center;gap:.7rem;font-size:.78rem;}
+    .mockup-card.green{background:rgba(16,185,129,.1);}
+    .mockup-card i{font-size:1.2rem;}
+    .mockup-card.blue i{color:var(--primary);}.mockup-card.green i{color:#10b981;}
+    .mockup-card small{color:var(--text-muted);display:block;font-size:.68rem;}
+    .mockup-card strong{color:#fff;font-size:.85rem;}
+    .mockup-chart-area{background:rgba(99,102,241,.05);border-radius:10px;padding:.8rem;margin-bottom:.7rem;}
+    .chart-label{font-size:.72rem;color:var(--text-muted);margin-bottom:.5rem;}
+    .chart-bars{display:flex;align-items:flex-end;gap:4px;height:60px;}
+    .bar{flex:1;background:rgba(99,102,241,.3);border-radius:3px 3px 0 0;transition:.3s;}
+    .bar.active{background:var(--primary);}
+    .mockup-alert{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:.6rem;font-size:.75rem;color:var(--text-muted);display:flex;align-items:center;}
+    /* FEATURES */
+    .section-features{padding:5rem 0;background:rgba(255,255,255,.02);}
+    .section-tag{background:rgba(99,102,241,.12);color:var(--primary);padding:.3rem .9rem;border-radius:50px;font-size:.78rem;font-weight:700;display:inline-block;margin-bottom:.7rem;}
+    .section-title{font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:.5rem;}
+    .section-sub{color:var(--text-muted);font-size:.92rem;}
+    .feature-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem;height:100%;transition:transform .3s,box-shadow .3s;position:relative;}
+    .feature-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(99,102,241,.15);}
+    .feature-card.featured{background:linear-gradient(135deg,#4338ca,#6366f1);}
+    .feature-badge{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.15);color:#fff;padding:.25rem .7rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+    .feature-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.2rem;}
+    .ic-blue{background:rgba(99,102,241,.15);color:var(--primary);}
+    .ic-purple{background:rgba(168,85,247,.2);color:#a855f7;}
+    .ic-green{background:rgba(16,185,129,.15);color:#10b981;}
+    .feature-card.featured .feature-icon-wrap{background:rgba(255,255,255,.15);}
+    .feature-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.6rem;}
+    .feature-card p{color:var(--text-muted);font-size:.85rem;line-height:1.6;}
+    .feature-card.featured p{color:rgba(255,255,255,.75);}
+    .feature-list{list-style:none;margin:.8rem 0 1.2rem;padding:0;}
+    .feature-list li{font-size:.82rem;color:var(--text-muted);display:flex;align-items:center;gap:.5rem;padding:.3rem 0;}
+    .feature-list li .fa-check{color:var(--accent);}
+    .feature-card.featured .feature-list li{color:rgba(255,255,255,.75);}
+    .btn-feature-cta,.btn-feature-cta-white{padding:.5rem 1rem;border-radius:10px;font-size:.82rem;font-weight:600;text-decoration:none;display:inline-block;transition:.2s;}
+    .btn-feature-cta{background:rgba(99,102,241,.12);color:var(--primary);border:1px solid var(--border);}
+    .btn-feature-cta:hover{background:var(--primary);color:#fff;}
+    .btn-feature-cta-white{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);}
+    .btn-feature-cta-white:hover{background:#fff;color:var(--primary);}
+    /* PRICING */
+    .section-pricing{padding:5rem 0;}
+    .price-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem;height:100%;position:relative;transition:transform .3s;}
+    .price-card:hover{transform:translateY(-4px);}
+    .price-card.popular{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary);}
+    .price-badge-top{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);color:var(--text-muted);padding:.2rem .8rem;border-radius:20px;font-size:.72rem;font-weight:700;white-space:nowrap;}
+    .popular-badge{background:var(--primary);color:#fff;border-color:var(--primary);}
+    .price-card h4{font-size:1.2rem;font-weight:700;margin-bottom:.5rem;margin-top:.8rem;}
+    .price-amount{margin-bottom:.4rem;}
+    .currency{font-size:1rem;font-weight:700;color:var(--primary);}
+    .amount{font-size:2.5rem;font-weight:800;font-family:'Sora',sans-serif;color:#fff;}
+    .period{font-size:.82rem;color:var(--text-muted);}
+    .price-desc{color:var(--text-muted);font-size:.82rem;margin-bottom:1.2rem;}
+    .price-features{list-style:none;padding:0;margin-bottom:1.5rem;}
+    .price-features li{font-size:.83rem;padding:.35rem 0;display:flex;align-items:center;gap:.5rem;color:var(--text-muted);}
+    .price-features li .fa-check{color:var(--accent);}
+    .price-features li.disabled{text-decoration:line-through;opacity:.4;}
+    .price-features li .fa-times{color:#ef4444;}
+    .btn-price-primary,.btn-price-outline{padding:.7rem;border-radius:12px;font-family:inherit;font-weight:700;font-size:.88rem;border:none;cursor:pointer;text-decoration:none;display:block;text-align:center;transition:.2s;}
+    .btn-price-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;}
+    .btn-price-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+    .btn-price-outline:hover{border-color:var(--primary);color:var(--primary);}
+    /* CTA */
+    .section-contact{padding:4rem 0;}
+    .cta-box{background:linear-gradient(135deg,#4338ca,#6366f1,#7c3aed);border-radius:24px;padding:2.5rem 2rem;color:#fff;}
+    .cta-box h2{font-size:1.8rem;font-weight:800;margin-bottom:.5rem;}
+    .cta-box p{opacity:.8;margin-bottom:0;}
+    .btn-cta-hero,.btn-cta-outline{padding:.75rem 1.5rem;border-radius:12px;font-family:inherit;font-weight:700;font-size:.9rem;text-decoration:none;display:inline-block;transition:.2s;}
+    .btn-cta-hero{background:#fff;color:var(--primary);}
+    .btn-cta-hero:hover{opacity:.92;color:var(--primary);}
+    .btn-cta-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);}
+    .btn-cta-outline:hover{background:rgba(255,255,255,.1);}
+    /* FOOTER */
+    .site-footer{background:var(--card);border-top:1px solid var(--border);padding:3rem 0 1.5rem;}
+    .footer-brand{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.6rem;}
+    .footer-brand .e{color:var(--primary);}.footer-brand .rum{color:#fff;}
+    .footer-desc{color:var(--text-muted);font-size:.82rem;line-height:1.6;max-width:260px;}
+    .footer-social{display:flex;gap:.6rem;margin-top:.8rem;}
+    .footer-social a{width:34px;height:34px;border-radius:9px;background:rgba(99,102,241,.1);color:var(--text-muted);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:.2s;font-size:.85rem;}
+    .footer-social a:hover{background:var(--primary);color:#fff;}
+    .site-footer h6{color:#fff;font-weight:700;margin-bottom:.8rem;font-size:.85rem;}
+    .site-footer ul{list-style:none;padding:0;}
+    .site-footer ul li{margin-bottom:.4rem;}
+    .site-footer ul li a{color:var(--text-muted);text-decoration:none;font-size:.82rem;transition:.2s;}
+    .site-footer ul li a:hover{color:#fff;}
+    .footer-form{display:flex;gap:.4rem;margin-top:.5rem;}
+    .footer-form input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:.5rem .7rem;color:var(--text);font-family:inherit;font-size:.82rem;outline:none;}
+    .footer-form button{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:.5rem .9rem;cursor:pointer;transition:.2s;}
+    .footer-form button:hover{opacity:.88;}
+    .footer-bottom{border-top:1px solid var(--border);padding-top:1rem;display:flex;justify-content:space-between;align-items:center;font-size:.77rem;color:var(--text-muted);}
+    .footer-bottom a{color:var(--text-muted);text-decoration:none;transition:.2s;}
+    .footer-bottom a:hover{color:#fff;}
+    /* BILLING TOGGLE */
+    .billing-toggle{display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--text-muted);}
+    .switch{position:relative;display:inline-block;width:42px;height:22px;}
+    .switch input{opacity:0;width:0;height:0;}
+    .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#475569;transition:.3s;border-radius:22px;}
+    .slider:before{position:absolute;content:'';height:16px;width:16px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%;}
+    input:checked+.slider{background:var(--primary);}
+    input:checked+.slider:before{transform:translateX(20px);}
+    /* TESTI */
+    .section-testimonial{padding:5rem 0;background:rgba(255,255,255,.02);}
+    .testi-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem;display:none;}
+    .testi-card.active{display:block;}
+    .testi-stars{color:#f59e0b;font-size:1.1rem;margin-bottom:.8rem;}
+    .testi-card p{color:var(--text-muted);font-size:.9rem;line-height:1.7;margin-bottom:1.2rem;}
+    .testi-author{display:flex;align-items:center;gap:.8rem;}
+    .testi-avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#a855f7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.85rem;}
+    .testi-author strong{font-size:.85rem;color:#fff;}
+    .testi-author small{color:var(--text-muted);font-size:.75rem;}
+    .dot-btn{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:.2s;margin:0 3px;}
+    .dot-btn.active{background:var(--primary);width:24px;border-radius:4px;}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="#"><span class="brand-e e">E</span><span class="brand-rum rum">RUM</span></a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-2">
+        <li class="nav-item"><a class="nav-link" href="#fitur">Fitur</a></li>
+        <li class="nav-item"><a class="nav-link" href="#keunggulan">Keunggulan</a></li>
+        <li class="nav-item"><a class="nav-link" href="#harga">Harga</a></li>
+        <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+        <li class="nav-item"><a class="btn btn-demo ms-2" href="login.php">Login / Daftar</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-section" id="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 hero-text mb-5 mb-lg-0">
+        <span class="badge-pill mb-3">🚀 Platform #1 untuk UMKM Indonesia</span>
+        <h1 class="hero-title">Kelola Bisnis<br/><span class="gradient-text">Lebih Cerdas</span><br/>dengan ERUM</h1>
+        <p class="hero-desc">Sistem manajemen usaha berbasis AI yang membantu UMKM tumbuh – dari perhitungan HPP otomatis, prediksi tren penjualan, hingga harga yang terjangkau.</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a href="login.php" class="btn-primary-cta"><i class="fa fa-play-circle me-2"></i>Mulai Gratis</a>
+          <a href="#fitur" class="btn-outline-cta"><i class="fa fa-info-circle me-2"></i>Pelajari Lebih Lanjut</a>
+        </div>
+        <div class="hero-stats d-flex mt-5 flex-wrap">
+          <div class="stat-item"><span class="stat-num" id="cnt1">0</span><span style="color:var(--primary)">+</span><p>UMKM Aktif</p></div>
+          <div class="stat-divider mx-3"></div>
+          <div class="stat-item"><span class="stat-num" id="cnt2">0</span><span style="color:var(--primary)">%</span><p>Kepuasan Pengguna</p></div>
+          <div class="stat-divider mx-3"></div>
+          <div class="stat-item"><span class="stat-num" id="cnt3">0</span><span style="color:var(--primary)"> Hari</span><p>Setup Cepat</p></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="dashboard-mockup">
+          <div class="mockup-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="mockup-title">ERUM Dashboard</span></div>
+          <div class="mockup-body">
+            <div class="mockup-row">
+              <div class="mockup-card blue"><i class="fa fa-calculator"></i><div><small>HPP Hari Ini</small><strong>Rp 2.450.000</strong></div></div>
+              <div class="mockup-card green"><i class="fa fa-chart-line"></i><div><small>Prediksi Tren</small><strong>↑ 23% Naik</strong></div></div>
+            </div>
+            <div class="mockup-chart-area">
+              <div class="chart-label">Penjualan Minggu Ini</div>
+              <div class="chart-bars">
+                <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div>
+                <div class="bar" style="height:50%"></div><div class="bar active" style="height:85%"></div>
+                <div class="bar" style="height:70%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:45%"></div>
+              </div>
+            </div>
+            <div class="mockup-alert"><i class="fa fa-bell text-warning me-2"></i><span>AI: Stok tepung hampir habis – restock direkomendasikan!</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FITUR -->
+<section class="section-features" id="fitur">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-tag">Fitur Unggulan</span>
+      <h2 class="section-title">Tiga Pilar Kekuatan ERUM</h2>
+      <p class="section-sub">Dirancang khusus untuk kebutuhan nyata UMKM Indonesia</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon-wrap ic-blue"><i class="fa fa-calculator"></i></div>
+          <h3>Perhitungan HPP Otomatis</h3>
+          <p>Hitung Harga Pokok Produksi secara otomatis berdasarkan bahan baku, tenaga kerja, dan biaya overhead.</p>
+          <ul class="feature-list">
+            <li><i class="fa fa-check"></i> Input bahan baku & biaya</li>
+            <li><i class="fa fa-check"></i> Kalkulasi margin keuntungan</li>
+            <li><i class="fa fa-check"></i> Laporan HPP harian/bulanan</li>
+          </ul>
+          <a href="login.php" class="btn-feature-cta">Lihat Demo <i class="fa fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="feature-card featured">
+          <div class="feature-badge">⭐ Andalan AI</div>
+          <div class="feature-icon-wrap ic-purple"><i class="fa fa-brain"></i></div>
+          <h3>AI Prediksi Tren & Restock</h3>
+          <p>Teknologi AI menganalisis pola penjualan dan memberi notifikasi restock otomatis agar stokmu tidak pernah habis.</p>
+          <ul class="feature-list">
+            <li><i class="fa fa-check"></i> Analisis tren real-time</li>
+            <li><i class="fa fa-check"></i> Notifikasi restock otomatis</li>
+            <li><i class="fa fa-check"></i> Prediksi permintaan mingguan</li>
+          </ul>
+          <a href="login.php" class="btn-feature-cta-white">Lihat Demo <i class="fa fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon-wrap ic-green"><i class="fa fa-coins"></i></div>
+          <h3>Bayar Sesuai Kebutuhan</h3>
+          <p>Model harga pay-as-you-go – pilih hanya fitur yang kamu butuhkan. Cocok untuk semua skala usaha.</p>
+          <ul class="feature-list">
+            <li><i class="fa fa-check"></i> Mulai dari Rp 0 (gratis)</li>
+            <li><i class="fa fa-check"></i> Upgrade kapan saja</li>
+            <li><i class="fa fa-check"></i> Hemat hingga 60%</li>
+          </ul>
+          <a href="#harga" class="btn-feature-cta">Lihat Paket <i class="fa fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HARGA -->
+<section class="section-pricing" id="harga">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-tag">Harga Transparan</span>
+      <h2 class="section-title">Pilih Paket yang Sesuai</h2>
+      <p class="section-sub">Mulai gratis, upgrade kapan saja. Tanpa biaya tersembunyi.</p>
+      <div class="billing-toggle mt-3">
+        <span>Bulanan</span>
+        <label class="switch mx-3"><input type="checkbox" id="billingToggle"><span class="slider"></span></label>
+        <span>Tahunan <span class="badge bg-success" style="font-size:.7rem">Hemat 20%</span></span>
+      </div>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-4 col-md-6">
+        <div class="price-card">
+          <div class="price-badge-top">Gratis</div>
+          <h4>Starter</h4>
+          <div class="price-amount"><span class="currency">Rp</span><span class="amount" data-monthly="0" data-yearly="0" id="p1">0</span><span class="period">/bln</span></div>
+          <p class="price-desc">Untuk usaha yang baru memulai</p>
+          <ul class="price-features">
+            <li><i class="fa fa-check"></i> HPP Otomatis (5 produk)</li>
+            <li><i class="fa fa-check"></i> Laporan dasar</li>
+            <li><i class="fa fa-check"></i> 1 pengguna</li>
+            <li class="disabled"><i class="fa fa-times"></i> AI Prediksi</li>
+          </ul>
+          <a href="login.php" class="btn-price-outline">Mulai Gratis</a>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="price-card popular">
+          <div class="price-badge-top popular-badge">🔥 Terpopuler</div>
+          <h4>Pro</h4>
+          <div class="price-amount"><span class="currency">Rp</span><span class="amount" data-monthly="49000" data-yearly="39200" id="p2">49.000</span><span class="period">/bln</span></div>
+          <p class="price-desc">Untuk UMKM yang siap berkembang</p>
+          <ul class="price-features">
+            <li><i class="fa fa-check"></i> HPP Otomatis unlimited</li>
+            <li><i class="fa fa-check"></i> AI Prediksi Tren</li>
+            <li><i class="fa fa-check"></i> Notifikasi restock</li>
+            <li><i class="fa fa-check"></i> 3 pengguna</li>
+          </ul>
+          <a href="login.php" class="btn-price-primary">Mulai Pro</a>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="price-card">
+          <div class="price-badge-top">Bisnis</div>
+          <h4>Business</h4>
+          <div class="price-amount"><span class="currency">Rp</span><span class="amount" data-monthly="99000" data-yearly="79200" id="p3">99.000</span><span class="period">/bln</span></div>
+          <p class="price-desc">Untuk usaha dengan banyak cabang</p>
+          <ul class="price-features">
+            <li><i class="fa fa-check"></i> Semua fitur Pro</li>
+            <li><i class="fa fa-check"></i> Multi-cabang & gudang</li>
+            <li><i class="fa fa-check"></i> Pengguna unlimited</li>
+            <li><i class="fa fa-check"></i> Support prioritas 24/7</li>
+          </ul>
+          <a href="login.php" class="btn-price-outline">Mulai Business</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section class="section-testimonial">
+  <div class="container">
+    <div class="text-center mb-5"><span class="section-tag">Testimoni</span><h2 class="section-title">Yang Mereka Katakan</h2></div>
+    <div id="testiSlider">
+      <div class="testi-card active">
+        <div class="testi-stars">★★★★★</div>
+        <p>"ERUM benar-benar mengubah cara saya mengelola warung makan. HPP otomatis bikin saya tahu persis harga jual yang tepat!"</p>
+        <div class="testi-author"><div class="testi-avatar">SL</div><div><strong>Siti Lestari</strong><br/><small>Pemilik Warung Makan, Surabaya</small></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Fitur AI-nya keren banget! Sekarang saya tidak pernah kehabisan stok di saat ramai karena selalu dapat notifikasi restock."</p>
+        <div class="testi-author"><div class="testi-avatar">BR</div><div><strong>Budi Raharjo</strong><br/><small>Pemilik Toko Sembako, Malang</small></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Harganya sangat terjangkau dibanding software lain. Fiturnya lengkap banget untuk ukuran UMKM kayak saya."</p>
+        <div class="testi-author"><div class="testi-avatar">DA</div><div><strong>Dewi Anggraini</strong><br/><small>Pemilik Toko Online, Jakarta</small></div></div>
+      </div>
+    </div>
+    <div class="testi-dots mt-4 text-center">
+      <span class="dot-btn active" data-idx="0"></span>
+      <span class="dot-btn" data-idx="1"></span>
+      <span class="dot-btn" data-idx="2"></span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-contact" id="kontak">
+  <div class="container">
+    <div class="cta-box">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7"><h2>Siap Naik Level?</h2><p>Daftar sekarang dan coba ERUM gratis selama 14 hari. Tidak perlu kartu kredit.</p></div>
+        <div class="col-lg-5 text-lg-end">
+          <a href="login.php" class="btn-cta-hero me-2">Coba Gratis 14 Hari</a>
+          <a href="#" class="btn-cta-outline">Konsultasi Gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="footer-brand"><span class="e">E</span><span class="rum">RUM</span></div>
+        <p class="footer-desc">Platform manajemen UMKM berbasis AI yang terjangkau dan mudah digunakan.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-tiktok"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h6>Produk</h6>
+        <ul><li><a href="#fitur">Fitur HPP</a></li><li><a href="#fitur">AI Prediksi</a></li><li><a href="#harga">Harga</a></li><li><a href="login.php">Login</a></li></ul>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h6>Perusahaan</h6>
+        <ul><li><a href="#">Tentang Kami</a></li><li><a href="#">Blog</a></li><li><a href="#">Karir</a></li></ul>
+      </div>
+      <div class="col-lg-4">
+        <h6>Newsletter</h6>
+        <p style="color:var(--text-muted);font-size:.82rem">Dapatkan tips bisnis dan update fitur terbaru.</p>
+        <div class="footer-form">
+          <input type="email" placeholder="email@contoh.com" id="footerEmail"/>
+          <button id="footerSubscribe"><i class="fa fa-paper-plane"></i></button>
+        </div>
+        <div id="subscribeMsg" style="display:none;color:#4ade80;font-size:.82rem;margin-top:.5rem"></div>
+      </div>
+    </div>
+    <div class="footer-bottom mt-4">
+      <span>© 2026 ERUM. Hak cipta dilindungi.</span>
+      <div><a href="#">Kebijakan Privasi</a><a href="#" class="ms-3">Syarat & Ketentuan</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+$(function(){
+  // Counter animation
+  function animateCounter(el, target, duration){
+    var start=0, step=target/60;
+    var timer=setInterval(function(){
+      start+=step;
+      if(start>=target){ $(el).text(target); clearInterval(timer); } else { $(el).text(Math.floor(start)); }
+    }, duration/60);
+  }
+  animateCounter('#cnt1',5000,2000);
+  animateCounter('#cnt2',98,1500);
+  animateCounter('#cnt3',1,800);
+
+  // Navbar scroll
+  $(window).on('scroll',function(){
+    if($(this).scrollTop()>50) $('#mainNav').css('padding','.4rem 0');
+    else $('#mainNav').css('padding','.6rem 0');
+  });
+
+  // Testimonial slider
+  var idx=0;
+  function showTesti(i){
+    $('.testi-card').removeClass('active').eq(i).addClass('active');
+    $('.dot-btn').removeClass('active').eq(i).addClass('active');
+    idx=i;
+  }
+  $('.dot-btn').on('click',function(){ showTesti(parseInt($(this).data('idx'))); });
+  setInterval(function(){ showTesti((idx+1)%3); }, 4000);
+
+  // Billing toggle
+  $('#billingToggle').on('change',function(){
+    var yearly=$(this).is(':checked');
+    $('[data-monthly]').each(function(){
+      var val=yearly?$(this).data('yearly'):$(this).data('monthly');
+      $(this).text(val.toLocaleString('id-ID'));
+    });
+  });
+
+  // Newsletter
+  $('#footerSubscribe').on('click',function(){
+    var email=$('#footerEmail').val().trim();
+    if(!email){ return; }
+    $('#subscribeMsg').text('✓ Terima kasih! Email kamu terdaftar.').show();
+    $('#footerEmail').val('');
+  });
+});
+</script>
+</body>
+</html>
