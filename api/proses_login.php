@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once '../db.php'; // karena file ada di /api
 
 header('Content-Type: application/json');
 
@@ -31,30 +31,50 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 try {
-    $db = getDB();
 
-    $stmt = $db->prepare("SELECT id, nama, email, password, role, status FROM users WHERE email = ? LIMIT 1");
+    // ❌ INI YANG SALAH: getDB()
+    // ✔️ GANTI KE $connection dari db.php
+
+    global $connection;
+
+    $stmt = $connection->prepare("
+        SELECT id, nama, email, password, role, status 
+        FROM users 
+        WHERE email = ? 
+        LIMIT 1
+    ");
+
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
     if (!$user) {
-        echo json_encode(['status' => 'error', 'message' => 'Email tidak terdaftar.']);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Email tidak terdaftar.'
+        ]);
         exit;
     }
 
     if ($user['status'] !== 'aktif') {
-        echo json_encode(['status' => 'error', 'message' => 'Akun tidak aktif.']);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Akun tidak aktif.'
+        ]);
         exit;
     }
 
-    // password check
     $valid = password_verify($password, $user['password']);
+
+    // fallback kalau password masih plaintext (legacy)
     if (!$valid && $password === $user['password']) {
         $valid = true;
     }
 
     if (!$valid) {
-        echo json_encode(['status' => 'error', 'message' => 'Password salah.']);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password salah.'
+        ]);
         exit;
     }
 
@@ -64,7 +84,6 @@ try {
     $_SESSION['email']   = $user['email'];
     $_SESSION['role']    = $user['role'];
 
-    // FIX PATH REDIRECT (INI PENTING)
     $redirect = ($user['role'] === 'superadmin')
         ? '/api/dashboard_admin.php'
         : '/dashboard.php';
