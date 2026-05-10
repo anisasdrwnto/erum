@@ -64,20 +64,16 @@ document.getElementById('loginBtn').addEventListener('click', async function () 
 
     try {
 
-        const response = await fetch('/proses_login.php', {
-
-            method: 'POST',
-
-            headers: {
-                'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-
-        });
+      const response = await fetch('/api/proses_login.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              email,
+              password
+          })
+      });
 
         const result = await response.json();
 
