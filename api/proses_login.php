@@ -6,12 +6,41 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/db.php';
 
-$data = json_decode(file_get_contents("php://input"), true);
 
-$email = trim($data['email'] ?? '');
-$password = trim($data['password'] ?? '');
+// =========================
+// AMBIL INPUT PALING AMAN
+// =========================
 
-if (!$email || !$password) {
+// coba dari JSON
+$json = json_decode(file_get_contents("php://input"), true);
+
+// fallback FORM POST
+$email =
+    trim(
+        $json['email']
+        ?? $_POST['email']
+        ?? ''
+    );
+
+$password =
+    trim(
+        $json['password']
+        ?? $_POST['password']
+        ?? ''
+    );
+
+
+// DEBUG
+// echo json_encode([
+//     'json' => $json,
+//     '_POST' => $_POST,
+//     'email' => $email,
+//     'password' => $password
+// ]);
+// exit;
+
+
+if (empty($email) || empty($password)) {
 
     echo json_encode([
         'status' => 'error',
@@ -26,7 +55,7 @@ try {
     global $connection;
 
     $stmt = $connection->prepare("
-        SELECT id, nama, email, password, role, status
+        SELECT *
         FROM users
         WHERE email = ?
         LIMIT 1
@@ -56,10 +85,15 @@ try {
         exit;
     }
 
-    $valid = password_verify($password, $user['password']);
+    $valid = false;
+
+    // password hash
+    if (password_verify($password, $user['password'])) {
+        $valid = true;
+    }
 
     // fallback plaintext
-    if (!$valid && $password === $user['password']) {
+    if ($password === $user['password']) {
         $valid = true;
     }
 
@@ -73,6 +107,7 @@ try {
         exit;
     }
 
+    // SESSION LOGIN
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['nama'] = $user['nama'];
     $_SESSION['email'] = $user['email'];
@@ -80,7 +115,8 @@ try {
 
     echo json_encode([
         'status' => 'ok',
-        'redirect' => ($user['role'] === 'superadmin')
+        'redirect' =>
+            ($user['role'] === 'superadmin')
             ? '/dashboard_admin.php'
             : '/dashboard.php'
     ]);
