@@ -1,18 +1,10 @@
 <?php
-session_start();
 
-require_once __DIR__ . '/db.php';
+session_start();
 
 header('Content-Type: application/json');
 
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Metode tidak valid.'
-    ]);
-    exit;
-}
+require_once __DIR__ . '/db.php';
 
 $email    = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
